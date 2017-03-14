@@ -1,0 +1,57 @@
+開發平台 : windos vista 32
+
+使用開發環境 : java 沒有環境 我是用文字編輯器(MadEdit) 
+
+// P.S.如果電腦環境變數 PATH有JAVA 按run.bat就可以執行了
+// 如果沒有 主檔案是Main.java
+// 請先key input檔名 , 螢幕上會先show出結果 , 然後再key一個輸出檔名
+// 可以把螢幕上顯示的畫面 輸出到檔案中
+
+完成的功能 : 都完成了
+
+說明你的程式設計(功能，流程，使用的data structure) :
+
+讀檔 根據拿到的INPUT對每個PROCESS 填上
+ID CPU_Burst Arrival_Time Priority Turnarround_Time RunTime 
+其中Turnarround_Time RunTime  初始為0
+根據每個PROCESS的Arrival_Time進行SORT
+
+最長執行時間為 process 中 Arrival_Time 的最大值 + 每個process 的 cpu burst
+
+根據 單位時間 進行cpu模擬
+當TIME 等於 最長執行時間 跳出迴圈
+
+
+如果time 等於 process 的 arrival time 把該process 加進一個waitting queue 中
+
+
+waitting queue中的第一個process 就是cpu要執行的process 甘特圖畫上process id
+若waitting queue為null 則表示cpu沒有process 可以執行 甘特圖畫上"-"
+
+若 waitting queue 不為null 把一個CPUidle的flag設為false 表示 cpu 是忙碌的
+接下來把 waitting queue 中的 每個process 的 Turnarround_Time +1 表示這個時間process已經到達且在排隊or執行多久
+
+把在waitting queue中的第一個process 的 mrun time +1 表示在這個時間process已經執行了多久
+
+
+接下來會根據不同排程而有不同的做法
+
+FJFS 如果 waitting queue中的第一個process 的 mCPU BURST 等於 mrun time 表示該PROCESS 已完成
+     把這個PROCESS 從 waitting queue中 REMOVE 
+
+RR   如果 waitting queue中的第一個process 的 mCPU BURST 等於 mrun time 表示該PROCESS 已完成
+     把這個PROCESS 從 waitting queue中 REMOVE 
+     如果 waitting queue中的第一個process 的  mrun time MOD time slice == 0 表示該PRCOESS用完     TIME SLICE 讓該 PROCESS 先移除 並加到 waitting queue的最後一個
+
+PSJF 這邊不一樣的是加進waitting queue的process 不一定是加在最後 必須根據 process 的 mcpu           burst 減 mrun time 的值來決定 
+     因為這個排程 不可奪取 所以後面準備加進 waitting queue 的 process 不可以插到index 為0的位      置( CPU_IDLE FLAG 為 TRUE 才可以插到到 index 為0的位置)
+     排好 waitting queue 之後 再根據FCFS的處理模式 就可以完成
+
+NPSJF 同PSJF的方法把 process 加進waitting queue
+      此排程可以奪取 所以可以把procsee 插到index 為0的位置
+      排好 waitting queue 之後 再根據FCFS的處理模式 就可以完成
+
+Priority 加進waitting queue的process 可以根據 Priority 進行插隊 也可以插到index 為0的位置
+         排好隊之後一樣再根據FCFS的處理模式來處理 不一樣的是若有一prcess 執行到一半被中斷
+         則會先排到 同樣Priority的process的最後面 不過若之後 又有相同Priority的process進入             waiting queue 必須把這個新進來的process 插到同Priority 但是已經執行過的process之前
+
